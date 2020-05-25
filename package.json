@@ -9,7 +9,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
   "dependencies": {
     "discord.js": "^12.2.0",
     "eslint": "^7.1.0",

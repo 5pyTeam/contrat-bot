@@ -1,9 +1,10 @@
-import * as cron from "node-cron"
-import * as Discord from "discord.js"
-import * as fs from "fs"
+const cron  = require("node-cron")
+const Discord = require("discord.js");
+const fs = require("fs");
 const client = new Discord.Client();
 const prefix = '!';
-const dataPath = 'data.json'
+const dataPath = 'data.json';
+var globalGuild;
 let jsonData = JSON.parse(fs.readFileSync(dataPath));
 
 const defaultEmbed = new Discord.MessageEmbed()
@@ -24,6 +25,7 @@ client.on('message', message => {
     const content = message.content;
     const member = message.guild.member(message.member);
     const guild = message.guild;
+    globalGuild = guild;
     const memberMentions = message.mentions.users;
     const roleMentions = message.mentions.roles;
     const params = message.content.slice(prefix.length).split(' ');
@@ -37,12 +39,17 @@ client.on('message', message => {
         if(params.length == 2 && params[1].match(regexDate) && memberMentions.size == 1)
         {
             const name = memberMentions.first().username;
+            const id = memberMentions.first().id;
             const data = JSON.parse(`{"date" : "${new Date().toString()}", "length": "${params[1]}"}`);
-            changeJson(name,data);
+            changeJson(id,data);
+            message.channel.send(`le contrat pour ${name} à été mis à jour pour ${params[1].split(1)[0]} ${params[1].split(1)[1] == 'm' ? 'mois': 'années'}`)
         }else
         {
             showHelp(message.channel,'contrat.add');
         }
+    }else if(command == 'contrat.verify')
+    {
+        verifyContracts();
     }
 });
 function showHelp(channel, command)
@@ -66,4 +73,26 @@ function changeJson(rank, data)
     jsonData[rank] = data;
     fs.writeFileSync(dataPath,JSON.stringify(jsonData));
 }
+function verifyContracts()
+{
+
+    for(var id in jsonData)
+    {
+       const member = globalGuild.member(id);
+       const date = Date.parse(jsonData[id].date);
+       const type= jsonData[id].length.split(1)[1];
+       const length = parseInt(jsonData[id].length.split(1)[0]);
+       const expireDate = date;
+       if(type == 'm')
+        {
+            expireDate.setMonth(expireDate.getMonth() + length);
+        }else {
+            expireDate.setFullYear(expireDate.getFullYear() + length);
+        }
+        console.log(expireDate.toString());
+    }
+}
+cron.schedule('30 16 * * *', () => {
+    
+})
 client.login('NzA5MDA1MDU0NzA2NzEyNjA4.Xsq-zA.Ef30UqetAgOPhNb-3Sn8yRIBw4o');
