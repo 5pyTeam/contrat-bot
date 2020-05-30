@@ -35,8 +35,8 @@ const remindersWithMessage = {
     "1": "\n━━━━━━━━━━━ \n\n**Bonjour,**\n\nTon contrat au sein de la structure 5py expirera dans 1 jour! Le temps presse et tu n'as plus beaucoup de temps pour prendre ta décision et en faire part à Wrath ! \n\n**Bonne après-midi,\nL'équipe de la 5py**\n\n━━━━━━━━━━━"
 }
 const messages = {
-    "add": "\n━━━━━━━━━━━\n\n**Salut,**\n\nNous te souhaitons la bienvenue au sein de la 5py! Pour rappel tu as choisi une durée de {number}, ton contrat est donc valide jusqu'au {expireDate} (Tu recevras un message de rappel lorsque que l'approche de la fin de validité de ton contrat approchera )\n\n*Nous espérons que la collaboration se passera bien et que ton expérience au sein de la structure sera bonne.*\n\n**Cordialement,\nL'équipe de la 5py**\n\n━━━━━━━━━━━",
-    "update": "Dans le précédent message, une erreur de date c'est glissée lors de l'indication de la date d'échéance du contrat !\n Voici cette fois-ci la date d'échéance correct de ton contrat :``{expireDate}\n\n **Toutes nos excuses,\nLe staff de la 5py**",
+    "add": "\n━━━━━━━━━━━\n\n**Salut,**\n\nNous te souhaitons la bienvenue au sein de la 5py! Pour rappel tu as choisi une durée de {number}, ton contrat est donc valide jusqu'au {expireDate} (Tu recevras un message de rappel lorsque que la fin de validité de ton contrat approchera )\n\n*Nous espérons que la collaboration se passera bien et que ton expérience au sein de la structure sera bonne.*\n\n**Cordialement,\nL'équipe de la 5py**\n\n━━━━━━━━━━━",
+    "update": "Dans le précédent message, une erreur de date c'est glissée lors de l'indication de la date d'échéance du contrat !\n Voici cette fois-ci la date d'échéance correct de ton contrat :``{expireDate}``\n\n **Toutes nos excuses,\nLe staff de la 5py**",
     "updatea": "\n━━━━━━━━━━━\n\n**Salut,**\n\nTu as choisis de renouveler ton contrat et nous sommes content que notre collaboration continue ! Pour rappel, tu as prolongé ton contrat de {number} mois, il est donc valide jusqu'au {expireDate}\n\n**Merci d'avoir choisi de poursuivre l'aventure avec nous,\nL'équipe de la 5py**\n\n━━━━━━━━━━━",
     "delete": "\n━━━━━━━━━━━\n\n **Salut,**\n\nTu as décidé de ne pas renouveler ton contrat et nous prenons acte de ta décision ! Au nom du Président, du Vice- Président et des membres du Staff, nous te remercions d'avoir partagé l'aventure avec nous et nous espérons que ton expérience au sein de celle - ci fût bonne! N'oublie pas que tu as la possibilité de repostuler pour un rôle au sein de la structure et que tu gardes le rôle visiteurs ainsi que les rôles des jeux que tu as choisis pour garder l'accès au salons dédiés.\n\n**Bonne continuation,\nL'équipe de la 5p**\n\n━━━━━━━━━━━"
 }
@@ -90,7 +90,7 @@ client.on('message', message => {
                 toSend = toSend.replace(/{number}/,`${length} ${length>1? type =='y'?'années' : 'mois' : type == 'y' ? 'année':'mois'}`);
                 toSend = toSend.replace(/{expireDate}/,expireDate.format('DD.MM.YYYY'));
                 memberMentions.first().send(toSend);
-                message.channel.send(`le contrat pour ${name} à été ${command == 'contrat.update' ? `mis à jour pour ${params[1].split('')[0]} ${params[1].split('')[1] == 'm' ? 'mois': 'années'}`: `crée`}`)
+                message.channel.send(`le contrat pour ${name} à été ${command == 'contrat.update' ? `mis à jour pour ${params[1].split('')[0]} ${params[1].split('')[1] == 'M' ? 'mois': 'années'}`: `crée`}`)
             }else {
                 message.channel.send('la date spécifiée n\'est pas valide');
             }
