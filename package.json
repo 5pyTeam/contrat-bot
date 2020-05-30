@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js | ./node_modules/.bin/pino-pretty| pino-tee warn ./warn-logs >> ./all-logs",
+    "dev": "LOG_LEVEL=debug node index.js | ./node_modules/.bin/pino-pretty| pino-tee warn ./warn-logs >> ./debug-logs"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +14,12 @@
   "dependencies": {
     "discord.js": "^12.2.0",
     "eslint": "^7.1.0",
-    "node-cron": "^2.0.3"
+    "moment": "^2.26.0",
+    "node-cron": "^2.0.3",
+    "pino": "^6.3.0"
+  },
+  "devDependencies": {
+    "pino-pretty": "^4.0.0",
+    "pino-tee": "^0.3.0"
   }
 }
