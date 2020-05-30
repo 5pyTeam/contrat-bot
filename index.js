@@ -82,7 +82,7 @@ client.on('message', message => {
                 if(command == 'contrat.add')
                     logger.info(`created a new contract for ${name}`);            
                 const length = parseInt(params[1].split('')[0]);
-                const type = params[i].split('')[1];
+                const type = params[1].split('')[1];
                 const expireDate = date.add(length,type);
 
                 const message = command == 'contrat.update'?messages["update"]:message["add"];
