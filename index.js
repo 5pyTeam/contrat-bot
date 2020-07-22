@@ -5,7 +5,12 @@ const moment = require("moment");
 const pino = require("pino");
 const client = new Discord.Client();
 const prefix = '!';
-const dataPath = 'data.json';
+const settings = JSON.parse(fs.readFileSync('settings.json'));
+const dataPath = settings["dataFileLocation"];
+if(!fs.existsSync(dataPath))
+{
+    console.error("le chemin du fichier de donnée est invalide");
+}
 var globalGuild;
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
 let jsonData = JSON.parse(fs.readFileSync(dataPath));
@@ -121,11 +126,13 @@ client.on('message', message => {
         }
     }else if(command == 'contrat.delete')
     {
-        if(memberMentions.length > 1)
+        console.log(memberMentions.size);
+        if(memberMentions.size >= 1)
         {
-            for(var i = 0; i < memberMentions.array.length;i++)
+            for(member in memberMentions)
             {
-                const user = memberMentions.array[i];
+                console.log('a');
+                const user = memberMentions[member];
                 deleteJson(user.id);
                 user.send(messages["delete"]);
             }
@@ -199,4 +206,4 @@ function verifyContracts()
 cron.schedule('30 16 * * *', () => {
     verifyContracts();
 });
-client.login('NzA5MDA1MDU0NzA2NzEyNjA4.Xsq-zA.Ef30UqetAgOPhNb-3Sn8yRIBw4o');
+client.login('NzA5MDA1MDU0NzA2NzEyNjA4.XxhYuQ.RA7PSPj4KHbIRq9PVmqIYj2CA3M');
