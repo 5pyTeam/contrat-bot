@@ -1,2 +1,5 @@
 node_modules
 .eslintrc.json
+all-logs
+debug-logs
+warn-logs

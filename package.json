@@ -13,13 +13,16 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^12.2.0",
-    "eslint": "^7.1.0",
+    "discord.js-commando": "github:discordjs/commando",
     "moment": "^2.26.0",
     "node-cron": "^2.0.3",
     "pino": "^6.3.0"
   },
   "devDependencies": {
+    "eslint": "^7.5.0",
+    "eslint-config-prettier": "^6.11.0",
     "pino-pretty": "^4.0.0",
-    "pino-tee": "^0.3.0"
+    "pino-tee": "^0.3.0",
+    "prettier": "2.0.5"
   }
 }
