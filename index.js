@@ -1,22 +1,40 @@
 const { CommandoClient } = require('discord.js-commando');
-const path = require('path');
-const client = new CommandoClient({
-  CommandPrefix: '!',
-  owner: '349253471490539520',
-});
-client.registry
-  .registerDefaultTypes()
-  .registerGroups([
-    ['first', 'Your First Command Group'],
-    ['second', 'Your Second Command Group'],
-  ])
-  .registerDefaultGroups()
-  .registerDefaultCommands()
-  .registerCommandsIn(path.join(__dirname, 'commands'));
-client.once('ready', () => {
-  console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
-  client.user.setActivity('with Commando');
-});
+const fs = require('fs');
+var settings;
+var start = true;
+if (!fs.existsSync('settings.json')) {
+  fs.writeFileSync(
+    'settings.json',
+    '{"dataPath": "your data path here", "token": "your token here"}'
+  );
+  console.log('a settings.json file was created, you need now to configure it');
+  start = false;
+} else {
+  settings = JSON.parse(fs.readFileSync('./settings.json'));
+  if (!fs.existsSync(settings.dataPath)) {
+    fs.writeFileSync(settings.dataPath, '{}');
+  }
+}
+if (start) {
+  const path = require('path');
+  const client = new CommandoClient({
+    CommandPrefix: '!',
+    owner: '349253471490539520',
+  });
+  client.registry
+    .registerDefaultTypes()
+    .registerGroups([
+      ['contrat', 'contrat system'],
+      ['second', 'Your Second Command Group'],
+    ])
+    .registerDefaultGroups()
+    .registerDefaultCommands()
+    .registerCommandsIn(path.join(__dirname, 'commands'));
+  client.once('ready', () => {
+    console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
+    client.user.setActivity('être un robot');
+  });
 
-client.on('error', console.error);
-client.login('NzA5MDA1MDU0NzA2NzEyNjA4.XxhYuQ.RA7PSPj4KHbIRq9PVmqIYj2CA3M');
+  client.on('error', console.error);
+  client.login(settings.token);
+}

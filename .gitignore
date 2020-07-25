@@ -3,3 +3,5 @@ node_modules
 all-logs
 debug-logs
 warn-logs
+settings.json
+data.json
