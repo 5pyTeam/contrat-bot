@@ -5,12 +5,15 @@ const { exec } = require('child_process');
 class utils {
   /*---------------- data ---------------*/
   //
-  static setData(rank, content) {
-    data[rank] = content;
+  static setData(guild, rank, content) {
+    data[guild][rank] = content;
     this.writeDataToFile();
   }
   static getData(rank) {
     return data[rank];
+  }
+  static dateSize() {
+    return Object.keys(myObject).length;
   }
   static delData(rank) {
     delete data[rank];
@@ -18,17 +21,7 @@ class utils {
   }
   static writeDataToFile() {
     fs.writeFileSync(settings.dataPath, JSON.stringify(data));
-    exec(`prettier --write ${settings.dataPath}`, (error, stdout, stderr) => {
-      if (error) {
-        console.log(`error: ${error.message}`);
-        return;
-      }
-      if (stderr) {
-        console.log(`stderr: ${stderr}`);
-        return;
-      }
-      console.log(`stdout: ${stdout}`);
-    });
+    this.prettierFile(settings.dataPath);
   }
   //
   //
@@ -42,7 +35,13 @@ class utils {
   }
   static writeSettingsToFile() {
     fs.writeFileSync('settings.json', JSON.stringify(settings));
-    exec('prettier --write settings.json', (error, stdout, stderr) => {
+    this.prettierFile('settings.json');
+  }
+  //
+  //
+  /*----------other-----------------*/
+  static prettierFile(path) {
+    exec(` prettier --write ${path}`, (error, stdout, stderr) => {
       if (error) {
         console.log(`error: ${error.message}`);
         return;
@@ -53,6 +52,29 @@ class utils {
       }
       console.log(`stdout: ${stdout}`);
     });
+  }
+  static verifyContract(guild) {
+    for (var id in jsonData[guild.id]) {
+      const member = guild.member(id);
+      const date = moment(jsonData[id].date);
+      const type = jsonData[id].length.split('')[1];
+      const length = parseInt(jsonData[id].length.split('')[0]);
+      const expireDate = moment(date);
+      logger.debug(`------${member.user.username}--------`);
+      logger.debug(`contract date: ${date.format('DD.MM.YYYY')}`);
+      logger.debug(`contract length: ${length}${type}`);
+      expireDate.add(length, type);
+      const left = expireDate.diff(moment(), 'days') + 1;
+      logger.debug(`left: ${left}`);
+      for (var value in remindersWithMessage) {
+        if (parseInt(value) == left) {
+          member.send(remindersWithMessage[value]);
+          logger.info(
+            `sending dm to ${member.user.username} because he has ${left} days left`,
+          );
+        }
+      }
+    }
   }
 }
 module.exports = { utils };

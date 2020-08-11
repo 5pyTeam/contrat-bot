@@ -15,7 +15,8 @@ module.exports = class AddCommand extends Command {
       args: [
         {
           key: 'member',
-          prompt: 'For which member would you like to add a contract?',
+          prompt:
+            'For which member would you like to add a contract?',
           type: 'member',
         },
         {
@@ -30,7 +31,7 @@ module.exports = class AddCommand extends Command {
           type: 'string',
           validate: (text) =>
             text.match(
-              /^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/
+              /^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/,
             ),
           default: moment().format('DD.MM.YYY'),
         },
@@ -45,12 +46,15 @@ module.exports = class AddCommand extends Command {
       `{"date": "${newDate.format()}", "length": "${time}","info": {"name": "${
         member.user.username
       }","tag": "${member.user.tag}"
-      }}`
+      }}`,
     );
-    utils.setData(id, data);
+    utils.setData(message.guild, id, data);
     var type = '';
-    if (String(message.content).indexOf('update') != -1) type = 'updated';
+    if (String(message.content).indexOf('update') != -1)
+      type = 'updated';
     else type = 'added a';
-    message.say(`sucessfully ${type} contract for ${member.user.username}`);
+    message.say(
+      `sucessfully ${type} contract for ${member.user.username}`,
+    );
   }
 };

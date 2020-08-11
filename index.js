@@ -5,9 +5,11 @@ var start = true;
 if (!fs.existsSync('settings.json')) {
   fs.writeFileSync(
     'settings.json',
-    '{"dataPath": "your data path here", "token": "your token here"}'
+    '{"dataPath": "your data path here", "token": "your token here"}',
   );
-  console.log('a settings.json file was created, you need now to configure it');
+  console.log(
+    'a settings.json file was created, you need now to configure it',
+  );
   start = false;
 } else {
   settings = JSON.parse(fs.readFileSync('./settings.json'));
@@ -31,10 +33,13 @@ if (start) {
     .registerDefaultCommands()
     .registerCommandsIn(path.join(__dirname, 'commands'));
   client.once('ready', () => {
-    console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
+    console.log(
+      `Logged in as ${client.user.tag}! (${client.user.id})`,
+    );
     client.user.setActivity('être un robot');
   });
 
   client.on('error', console.error);
   client.login(settings.token);
+  this.client = client;
 }
