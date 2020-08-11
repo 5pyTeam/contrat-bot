@@ -8,6 +8,7 @@
   </a>
 </h1>
 a bot that manage contract for organization.
+
 ## to know
 For now the bot is not hosted, you need to host it yourself. In the future you will able to configure it from a website and will be available without a need to host it yourself.
 
