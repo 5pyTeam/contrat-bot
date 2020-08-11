@@ -1,9 +1,11 @@
 {
   "dataPath": "data.json",
   "token": "NzA5MDA1MDU0NzA2NzEyNjA4.XxhYuQ.RA7PSPj4KHbIRq9PVmqIYj2CA3M",
-  "reminderMessages": {
-      "7":{
-          "reminderMessages"
-      }
-  }
+  "reminderMessages": [
+    {
+      "dayLeft": "7",
+      "message":"You have 7 days left"
+    }
+  ]
+      
 }

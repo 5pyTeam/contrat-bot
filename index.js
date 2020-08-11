@@ -1,5 +1,6 @@
 const { CommandoClient } = require('discord.js-commando');
 const fs = require('fs');
+const { logger } = require('./utils')
 var settings;
 var start = true;
 if (!fs.existsSync('settings.json')) {
@@ -33,13 +34,13 @@ if (start) {
     .registerDefaultCommands()
     .registerCommandsIn(path.join(__dirname, 'commands'));
   client.once('ready', () => {
-    console.log(
+    logger.info(
       `Logged in as ${client.user.tag}! (${client.user.id})`,
     );
     client.user.setActivity('être un robot');
   });
 
-  client.on('error', console.error);
+  client.on('error', logger.error);
   client.login(settings.token);
   this.client = client;
 }

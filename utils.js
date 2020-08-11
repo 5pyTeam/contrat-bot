@@ -2,6 +2,8 @@ const fs = require('fs');
 const settings = JSON.parse(fs.readFileSync('settings.json'));
 const data = JSON.parse(fs.readFileSync(settings.dataPath));
 const { exec } = require('child_process');
+const { createLogger, format, transports } = require('winston');
+const { combine, timestamp, label, prettyPrint,simple } = format;
 class utils {
   /*---------------- data ---------------*/
   //
@@ -53,7 +55,7 @@ class utils {
       console.log(`stdout: ${stdout}`);
     });
   }
-  static verifyContract(guild) {
+  static verifyContractOfGuild(guild) {
     for (var id in jsonData[guild.id]) {
       const member = guild.member(id);
       const date = moment(jsonData[id].date);
@@ -69,7 +71,7 @@ class utils {
       for (var value in remindersWithMessage) {
         if (parseInt(value) == left) {
           member.send(remindersWithMessage[value]);
-          logger.info(
+          logger.debug(
             `sending dm to ${member.user.username} because he has ${left} days left`,
           );
         }
@@ -77,4 +79,19 @@ class utils {
     }
   }
 }
-module.exports = { utils };
+//winston configuration
+const logger = createLogger({
+  format: combine(
+    timestamp(),
+    prettyPrint()
+  ),
+  transports: [
+
+      new transports.File({filename: 'error.log', level: 'error'}),
+      new transports.File({filename: 'combined.log'}),
+      new transports.Console({format: simple()})
+  ]
+});
+
+
+module.exports = { utils , logger};
