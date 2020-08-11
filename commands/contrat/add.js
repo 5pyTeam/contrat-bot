@@ -40,7 +40,6 @@ module.exports = class AddCommand extends Command {
   }
   run(message, { member, time, date }) {
     const id = member.id;
-    console.log(time);
     const newDate = moment(date, 'DD.MM.YYYY');
     const data = JSON.parse(
       `{"date": "${newDate.format()}", "length": "${time}","info": {"name": "${
@@ -48,7 +47,7 @@ module.exports = class AddCommand extends Command {
       }","tag": "${member.user.tag}"
       }}`,
     );
-    utils.setData(message.guild, id, data);
+    utils.setData(message.guild.id, id, data);
     var type = '';
     if (String(message.content).indexOf('update') != -1)
       type = 'updated';
