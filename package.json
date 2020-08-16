@@ -10,7 +10,7 @@
   "repository": "https://github.com/5pyTeam/contrat-bot",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node bootrstrap.js",
+    "start": "node bootstrap.js",
     "debug": "nodemon index.js"
   },
   "keywords": [],
@@ -19,6 +19,7 @@
   "dependencies": {
     "auto-updater": "^1.0.2",
     "child_process": "^1.0.2",
+    "command-exists": "^1.2.9",
     "discord.js": "^12.2.0",
     "discord.js-commando": "github:discordjs/commando",
     "express": "^4.17.1",

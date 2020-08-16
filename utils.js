@@ -10,60 +10,96 @@ class utils {
   /*---------------- data ---------------*/
   //
   static setData(guild, rank, content) {
-    if (!data[guild]) {
-      data[guild] = {};
+    try {
+      if (!data[guild]) {
+        data[guild] = {};
+      }
+      console.log(data);
+      data[guild][rank] = content;
+      this.writeDataToFile();
+    } catch (err) {
+      logger.error(err);
     }
-    console.log(data);
-    data[guild][rank] = content;
-    this.writeDataToFile();
   }
   static getData(rank) {
-    return data[rank];
+    try {
+      return data[rank];
+    } catch (err) {
+      logger.error(err);
+    }
   }
   static dateSize() {
-    return Object.keys(myObject).length;
+    try {
+      return Object.keys(myObject).length;
+    } catch (err) {
+      logger.error(err);
+    }
   }
   static delData(rank) {
-    delete data[rank];
-    this.writeDataToFile();
+    try {
+      delete data[rank];
+      this.writeDataToFile();
+    } catch (err) {
+      logger.error(err);
+    }
   }
   static writeDataToFile() {
-    fs.writeFileSync(settings.dataPath, JSON.stringify(data));
-    this.prettierFile(settings.dataPath);
+    try {
+      fs.writeFileSync(settings.dataPath, JSON.stringify(data));
+      this.prettierFile(settings.dataPath);
+    } catch (err) {
+      logger.error(err);
+    }
   }
   //
   //
   /*--------------settings ---------------------*/
   static getSettings(rank) {
-    return settings[rank];
+    try {
+      return settings[rank];
+    } catch (err) {
+      logger.error(err);
+    }
   }
   static setSettings(rank, content) {
-    settings[rank] = content;
-    this.writeSettingsToFile();
+    try {
+      settings[rank] = content;
+      this.writeSettingsToFile();
+    } catch (err) {
+      logger.error(err);
+    }
   }
   static writeSettingsToFile() {
-    fs.writeFileSync('settings.json', JSON.stringify(settings));
-    this.prettierFile('settings.json');
+    try {
+      fs.writeFileSync('settings.json', JSON.stringify(settings));
+      this.prettierFile('settings.json');
+    } catch (err) {
+      logger.error(err);
+    }
   }
   //
   //
   /*----------other-----------------*/
   static prettierFile(path) {
-    exec(` prettier --write ${path}`, (error, stdout, stderr) => {
-      if (error) {
-        console.log(`error: ${error.message}`);
-        return;
-      }
-      if (stderr) {
-        console.log(`stderr: ${stderr}`);
-        return;
-      }
-      console.log(`stdout: ${stdout}`);
-    });
+    try {
+      exec(` prettier --write ${path}`, (error, stdout, stderr) => {
+        if (error) {
+          logger.error(error);
+          return;
+        }
+        if (stderr) {
+          logger.error(stderr);
+          return;
+        }
+        console.log(`stdout: ${stdout}`);
+      });
+    } catch (err) {
+      logger.error(err);
+    }
   }
   static verifyContractOfGuild(guild) {
-    try {
-      for (var id in data[guild.id]) {
+    for (var id in data[guild.id]) {
+      try {
         const memberName = data[guild.id][id]['info']['name'];
         const date = moment(data[guild.id][id].date);
         const type = data[guild.id][id].length.split('')[1];
@@ -71,39 +107,40 @@ class utils {
           data[guild.id][id].length.split('')[0],
         );
         const expireDate = moment(date);
-        logger.info(`contract length: ${length}${type}`);
         expireDate.add(length, type);
         const left = expireDate.diff(moment(), 'days') + 1;
-        logger.info(`left: ${left}`);
         logger.info(
           `{"name":"${memberName}", "made": "${date.format(
             'DD.MM.YYYY',
           )}", "length": ${length}${type}, "left": "${left}" }`,
         );
         for (var value in settings['reminderMessages'][guild.id]) {
-          if (
-            parseInt(
-              settings['reminderMessages'][guild.id][value][
-                'dayLeft'
-              ],
-            ) == left
-          ) {
-            guild.members.cache
-              .get(id)
-              .send(
+          try {
+            if (
+              parseInt(
                 settings['reminderMessages'][guild.id][value][
-                  'message'
+                  'dayLeft'
                 ],
+              ) == left
+            ) {
+              guild.members.cache
+                .get(id)
+                .send(
+                  settings['reminderMessages'][guild.id][value][
+                    'message'
+                  ],
+                );
+              logger.info(
+                `sending dm to ${memberName} because he has ${left} days left`,
               );
-            logger.info(
-              `sending dm to ${memberName} because he has ${left} days left`,
-            );
+            }
+          } catch (err) {
+            logger.error(err);
           }
         }
+      } catch (err) {
+        logger.error(err);
       }
-    } catch (error) {
-      console.log(error);
-      logger.error(error.message + ' in verifyContractOfGuild');
     }
   }
 }

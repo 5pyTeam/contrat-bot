@@ -1,25 +1,44 @@
 const commando = require('discord.js-commando');
+const commandExists = require('command-exists');
+const path = require('path');
 const fs = require('fs');
-const { logger } = require('./utils');
+const { logger, utils } = require('./utils');
 var settings;
-var start = true;
+
+//
+//
+//----------check if all files exists and create them if not--------------------
+//
+//
+commandExists('ls', function (err, commandExists) {
+  if (err) logger.error(err);
+  if (!commandExists) {
+    throw error(
+      'you need to install prettier globally by running: npm install -g prettier',
+    );
+  }
+});
 if (!fs.existsSync('settings.json')) {
   fs.writeFileSync(
     'settings.json',
-    '{"dataPath": "your data path here", "token": "your token here"}',
+    '{"dataPath": "your data path",  "token": "your token","reminderMessages": {"server id" :[{"dayLeft": "7","message":"You have 7 days left"}]}}',
   );
-  console.log(
+  utils.prettierFile('settings.json');
+  throw error(
     'a settings.json file was created, you need now to configure it',
   );
-  start = false;
 } else {
   settings = JSON.parse(fs.readFileSync('./settings.json'));
   if (!fs.existsSync(settings.dataPath)) {
     fs.writeFileSync(settings.dataPath, '{}');
   }
 }
-if (start) {
-  const path = require('path');
+//
+//
+//------------------------commando init-------------------------------
+//
+//
+try {
   const client = new commando.CommandoClient({
     CommandPrefix: '!',
     owner: '349253471490539520',
@@ -45,4 +64,6 @@ if (start) {
   }
   client.on('error', logger.error);
   client.login(settings.token);
+} catch (err) {
+  logger.error(err);
 }

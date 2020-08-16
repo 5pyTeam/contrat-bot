@@ -1,6 +1,6 @@
 {
-  "dataPath": "your data path",
-  "token": "your token",
+  "dataPath": "data.json",
+  "token": "NzA5MDA1MDU0NzA2NzEyNjA4.XrfmaQ.1HmPzOgOdB0q3rN-Q25Ydsrf22U",
   "reminderMessages": {
       "server id" :[
         {

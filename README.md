@@ -25,6 +25,9 @@ $ cd contrat-bot
 # Install dependencies
 $ npm install
 
+# Install prettier globally
+$ npm install -g prettier
+
 # Run the app
 $ npm start
 ```
