@@ -1,8 +1,8 @@
 {
   "dataPath": "data.json",
-  "token": "you token",
+  "token": "your token",
   "reminderMessages": {
-      "604350874252214304" :[
+      "server id" :[
         {
           "dayLeft": "7",
           "message":"You have 7 days left"
