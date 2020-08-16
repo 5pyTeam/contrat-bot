@@ -1,25 +1,37 @@
 {
   "name": "contrat",
   "version": "1.0.0",
-  "description": "",
+  "auto-updater": {
+    "repo": "/5pyTeam/contrat-bot",
+    "branch": "master"
+  },
+  "description": "a discord for managing contract of an organization",
   "main": "index.js",
+  "repository": "https://github.com/5pyTeam/contrat-bot",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js | ./node_modules/.bin/pino-pretty| pino-tee warn ./warn-logs >> ./all-logs",
-    "dev": "LOG_LEVEL=debug node index.js | ./node_modules/.bin/pino-pretty| pino-tee warn ./warn-logs >> ./debug-logs"
+    "start": "node index.js",
+    "debug": "nodemon index.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Yohan Zbinden",
+  "license": "MIT",
   "dependencies": {
+    "auto-updater": "^1.0.2",
+    "child_process": "^1.0.2",
     "discord.js": "^12.2.0",
-    "eslint": "^7.1.0",
+    "discord.js-commando": "github:discordjs/commando",
+    "express": "^4.17.1",
+    "git-auto-pull": "^1.0.9",
     "moment": "^2.26.0",
     "node-cron": "^2.0.3",
-    "pino": "^6.3.0"
+    "pino": "^6.3.0",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
-    "pino-pretty": "^4.0.0",
-    "pino-tee": "^0.3.0"
+    "eslint": "^7.5.0",
+    "eslint-config-prettier": "^6.11.0",
+    "nodemon": "^2.0.4",
+    "prettier": "2.0.5"
   }
 }

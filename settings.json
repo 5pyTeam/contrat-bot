@@ -1,4 +1,12 @@
 {
-    "dataFileLocation": "./data.json",
-    "token": "NzA5MDA1MDU0NzA2NzEyNjA4.Xsq-zA.Ef30UqetAgOPhNb-3Sn8yRIBw4o"
+  "dataPath": "data.json",
+  "token": "you token",
+  "reminderMessages": {
+      "604350874252214304" :[
+        {
+          "dayLeft": "7",
+          "message":"You have 7 days left"
+        }
+        ]
+    }
 }
