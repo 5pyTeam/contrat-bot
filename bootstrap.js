@@ -26,7 +26,7 @@ function startApp() {
 }
 app.get('/', restartApp);
 app.post('/', restartApp);
-restartApp();
+startApp();
 http.createServer(app).listen(port, function () {
   console.log('Express server listening on port ' + port);
 });
