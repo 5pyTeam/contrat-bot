@@ -1,5 +1,5 @@
 {
-  "dataPath": "data.json",
+  "dataPath": "your data path",
   "token": "your token",
   "reminderMessages": {
       "server id" :[

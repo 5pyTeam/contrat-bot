@@ -1,7 +1,8 @@
 node_modules
 .eslintrc.json
-combined.log
-error.log
+*.log
 data.json
-settings.json
+/settings.json
+package-lock.json
+nohup.out
 

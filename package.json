@@ -10,7 +10,7 @@
   "repository": "https://github.com/5pyTeam/contrat-bot",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
+    "start": "node bootrstrap.js",
     "debug": "nodemon index.js"
   },
   "keywords": [],
