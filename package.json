@@ -1,8 +1,13 @@
 {
   "name": "contrat",
   "version": "1.0.0",
+  "auto-updater": {
+    "repo": "/5pyTeam/contrat-bot",
+    "branch": "master"
+  },
   "description": "a discord for managing contract of an organization",
   "main": "index.js",
+  "repository": "https://github.com/5pyTeam/contrat-bot",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
@@ -12,8 +17,12 @@
   "author": "Yohan Zbinden",
   "license": "MIT",
   "dependencies": {
+    "auto-updater": "^1.0.2",
+    "child_process": "^1.0.2",
     "discord.js": "^12.2.0",
     "discord.js-commando": "github:discordjs/commando",
+    "express": "^4.17.1",
+    "git-auto-pull": "^1.0.9",
     "moment": "^2.26.0",
     "node-cron": "^2.0.3",
     "pino": "^6.3.0",

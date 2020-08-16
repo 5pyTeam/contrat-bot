@@ -1,6 +1,6 @@
-const { CommandoClient } = require('discord.js-commando');
+const commando = require('discord.js-commando');
 const fs = require('fs');
-const { logger } = require('./utils')
+const { logger } = require('./utils');
 var settings;
 var start = true;
 if (!fs.existsSync('settings.json')) {
@@ -20,9 +20,10 @@ if (!fs.existsSync('settings.json')) {
 }
 if (start) {
   const path = require('path');
-  const client = new CommandoClient({
+  const client = new commando.CommandoClient({
     CommandPrefix: '!',
     owner: '349253471490539520',
+    unknowCommandResponse: false,
   });
   client.registry
     .registerDefaultTypes()
@@ -31,7 +32,7 @@ if (start) {
       ['second', 'Your Second Command Group'],
     ])
     .registerDefaultGroups()
-    .registerDefaultCommands()
+    //.registerDefaultCommands()
     .registerCommandsIn(path.join(__dirname, 'commands'));
   client.once('ready', () => {
     logger.info(
@@ -39,8 +40,9 @@ if (start) {
     );
     client.user.setActivity('être un robot');
   });
-
+  function sendMp(memberId, message) {
+    client.member.id.fetch(memberId).send(message);
+  }
   client.on('error', logger.error);
   client.login(settings.token);
-  this.client = client;
 }

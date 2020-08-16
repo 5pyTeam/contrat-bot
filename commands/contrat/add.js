@@ -47,11 +47,17 @@ module.exports = class AddCommand extends Command {
       }","tag": "${member.user.tag}"
       }}`,
     );
-    utils.setData(message.guild.id, id, data);
     var type = '';
     if (String(message.content).indexOf('update') != -1)
       type = 'updated';
     else type = 'added a';
+    if (type != 'updated' && utils.getData(message.guild.id)[id]) {
+      message.say(
+        `Watch out! You cannot add a contract for a player that already exist.`,
+      );
+      return;
+    }
+    utils.setData(message.guild.id, id, data);
     message.say(
       `sucessfully ${type} contract for ${member.user.username}`,
     );

@@ -4,6 +4,7 @@ const data = JSON.parse(fs.readFileSync(settings.dataPath));
 const { exec } = require('child_process');
 const { createLogger, format, transports } = require('winston');
 const moment = require('moment');
+const { RichEmbed } = require('discord.js');
 const { combine, timestamp, label, prettyPrint, simple } = format;
 class utils {
   /*---------------- data ---------------*/
@@ -61,30 +62,48 @@ class utils {
     });
   }
   static verifyContractOfGuild(guild) {
-    logger.info('run');
-    for (var id in data[guild.id]) {
-      const member = guild.member(id);
-      const date = moment(data[guild.id][id].date);
-      const type = data[guild.id][id].length.split('')[1];
-      const length = parseInt(data[guild.id][id].length.split('')[0]);
-      const expireDate = moment(date);
-      logger.info(`------${member.user.username}--------`);
-      logger.info(`contract date: ${date.format('DD.MM.YYYY')}`);
-      logger.info(`contract length: ${length}${type}`);
-      expireDate.add(length, type);
-      const left = expireDate.diff(moment(), 'days') + 1;
-      logger.info(`left: ${left}`);
-      for (var value in settings['reminderMessages']) {
-        if (
-          parseInt(settings['reminderMessages'][value]['dayLeft']) ==
-          left
-        ) {
-          member.send(settings['reminderMessages'][value]['message']);
-          logger.info(
-            `sending dm to ${member.user.username} because he has ${left} days left`,
-          );
+    try {
+      for (var id in data[guild.id]) {
+        const memberName = data[guild.id][id]['info']['name'];
+        const date = moment(data[guild.id][id].date);
+        const type = data[guild.id][id].length.split('')[1];
+        const length = parseInt(
+          data[guild.id][id].length.split('')[0],
+        );
+        const expireDate = moment(date);
+        logger.info(`contract length: ${length}${type}`);
+        expireDate.add(length, type);
+        const left = expireDate.diff(moment(), 'days') + 1;
+        logger.info(`left: ${left}`);
+        logger.info(
+          `{"name":"${memberName}", "made": "${date.format(
+            'DD.MM.YYYY',
+          )}", "length": ${length}${type}, "left": "${left}" }`,
+        );
+        for (var value in settings['reminderMessages'][guild.id]) {
+          if (
+            parseInt(
+              settings['reminderMessages'][guild.id][value][
+                'dayLeft'
+              ],
+            ) == left
+          ) {
+            guild.members.cache
+              .get(id)
+              .send(
+                settings['reminderMessages'][guild.id][value][
+                  'message'
+                ],
+              );
+            logger.info(
+              `sending dm to ${memberName} because he has ${left} days left`,
+            );
+          }
         }
       }
+    } catch (error) {
+      console.log(error);
+      logger.error(error.message + ' in verifyContractOfGuild');
     }
   }
 }
@@ -94,8 +113,20 @@ const logger = createLogger({
   transports: [
     new transports.File({ filename: 'error.log', level: 'error' }),
     new transports.File({ filename: 'combined.log' }),
-    new transports.Console({ format: simple() }),
+    new transports.Console({ format: format.simple() }),
   ],
 });
-
+//auto update
+const config = {
+  repository: 'https://github.com/5pyTeam/contrat-bot',
+  tempLocation: '/tmp',
+  ignoreFiles: [
+    'settings.json',
+    'error.log',
+    'combined.log',
+    'data.json',
+  ],
+  executeOnComplete: './finish.sh',
+  exitOnComplete: true,
+};
 module.exports = { utils, logger };
