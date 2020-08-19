@@ -2,7 +2,6 @@ const commando = require('discord.js-commando');
 const commandExists = require('command-exists');
 const path = require('path');
 const fs = require('fs');
-const { logger, utils } = require('./utils');
 var settings;
 
 //
@@ -19,20 +18,23 @@ commandExists('ls', function (err, commandExists) {
   }
 });
 if (!fs.existsSync('settings.json')) {
+  logger.info("settings file don't exist, creating one");
   fs.writeFileSync(
     'settings.json',
     '{"dataPath": "your data path",  "token": "your token","reminderMessages": {"server id" :[{"dayLeft": "7","message":"You have 7 days left"}]}}',
   );
   utils.prettierFile('settings.json');
-  throw error(
+  logger.error(
     'a settings.json file was created, you need now to configure it',
   );
 } else {
   settings = JSON.parse(fs.readFileSync('./settings.json'));
   if (!fs.existsSync(settings.dataPath)) {
+    logger.info('data file don`t exist, creating one');
     fs.writeFileSync(settings.dataPath, '{}');
   }
 }
+const { logger, utils } = require('./utils');
 //
 //
 //------------------------commando init-------------------------------

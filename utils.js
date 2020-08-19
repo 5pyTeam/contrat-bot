@@ -1,13 +1,30 @@
-const fs = require('fs');
-const settings = JSON.parse(fs.readFileSync('settings.json'));
-const data = JSON.parse(fs.readFileSync(settings.dataPath));
+try {
+  const fs = require('fs');
+  if (fs.existsSync('./settings.json')) {
+    const settings = JSON.parse(fs.readFileSync('settings.json'));
+    if (fs.existsSync(settings.dataPath)) {
+      const data = JSON.parse(fs.readFileSync(settings.dataPath));
+    }
+  }
+} catch (err) {
+  logger.error(`on utils:\n ${err}`);
+}
 const { exec } = require('child_process');
-const { createLogger, format, transports } = require('winston');
+const {
+  createLogger,
+  format,
+  transports,
+  addColors,
+} = require('winston');
 const moment = require('moment');
 const { RichEmbed } = require('discord.js');
 const { combine, timestamp, label, prettyPrint, simple } = format;
+
 class utils {
-  /*---------------- data ---------------*/
+  //
+  //
+  //------------------------data-------------------------------
+  //
   //
   static setData(guild, rank, content) {
     try {
@@ -53,7 +70,9 @@ class utils {
   }
   //
   //
-  /*--------------settings ---------------------*/
+  //------------------------settings-------------------------------
+  //
+  //
   static getSettings(rank) {
     try {
       return settings[rank];
@@ -79,7 +98,9 @@ class utils {
   }
   //
   //
-  /*----------other-----------------*/
+  //------------------------other-------------------------------
+  //
+  //
   static prettierFile(path) {
     try {
       exec(` prettier --write ${path}`, (error, stdout, stderr) => {
@@ -144,7 +165,11 @@ class utils {
     }
   }
 }
-//winston configuration
+//
+//
+//------------------------winston-------------------------------
+//
+//
 const logger = createLogger({
   format: combine(timestamp(), prettyPrint()),
   transports: [
@@ -153,17 +178,10 @@ const logger = createLogger({
     new transports.Console({ format: format.simple() }),
   ],
 });
-//auto update
-const config = {
-  repository: 'https://github.com/5pyTeam/contrat-bot',
-  tempLocation: '/tmp',
-  ignoreFiles: [
-    'settings.json',
-    'error.log',
-    'combined.log',
-    'data.json',
-  ],
-  executeOnComplete: './finish.sh',
-  exitOnComplete: true,
-};
+addColors({
+  error: 'red',
+  warn: 'yellow',
+  info: 'cyan',
+  debug: 'green',
+});
 module.exports = { utils, logger };
